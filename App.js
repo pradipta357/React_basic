@@ -1,48 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const App = () => {
-  let[c,setC]=useState(55)
-  let[m,setM]=useState(0)
-  let[iid,setIid]=useState(-1)
-  let inc=()=>{
-    setC((c)=>{
-      if(c==59){
-        setM((m)=>m+1)
-        return 0
+  const [t, sett] = useState({ m: 0, s: 0 });
+  const [iid, setIid] = useState(-1);
+
+  const inc = () => {
+    sett(prev => {
+      let s = prev.s + 1;
+      let m = prev.m;
+
+      if (s === 60) {
+        s = 0;
+        m += 1;
       }
-      else{
-        return c+1
-      }
-    })
-  }
-  
-  let st=()=>{
-    if(iid==-1)
-    {
-      setIid(setInterval(inc,1000))
+
+      return { m, s };
+    });
+  };
+
+  const st = () => {
+    if (iid === -1) {
+      setIid(setInterval(inc, 100));
     }
-  }
+  };
 
-  let stop=()=>{
-    clearInterval(iid)
-    setIid(-1)
-  }
+  const stop = () => {
+    clearInterval(iid);
+    setIid(-1);
+  };
 
-  let rs=()=>{
-    clearInterval(iid)
-    setIid(-1)
-    setC(0)
-    setM(0)
-  }
+  const rs = () => {
+    clearInterval(iid);
+    setIid(-1);
+    sett({ m: 0, s: 0 });
+  };
 
   return (
     <div>
-      <div>{m<10?"0"+m:m}:{c<10?"0"+c:c}</div>
+      <div>
+        {t.m < 10 ? '0' + t.m : t.m}:{t.s < 10 ? '0' + t.s : t.s}
+      </div>
       <button onClick={st}>Start</button>
       <button onClick={stop}>Stop</button>
       <button onClick={rs}>Reset</button>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
